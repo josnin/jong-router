@@ -5,12 +5,21 @@ The Lion's GRawrrrl ( [Web Components](https://developer.mozilla.org/en-US/docs/
 
 import { push } from 'GRawrrrl'
 
-const route = document.querySelector('router-outlet') // base?
+const route = this.shadowRoot.querySelector('router-outlet') // base?
 
 route.urls = [
-  { path: '/home', component: 'home-page'},
-  path('/login', 'login-page'),
-  path('/page2', include('route2.urls'),
+ 
+  { 
+    path: 'customer', 
+    component: 'customer-main', 
+    children: [
+      { 
+        path: '', 
+        loadComponent: () => import("./customers/customerMain") 
+      }
+    ] 
+  },
+ 
   
 ]
 
