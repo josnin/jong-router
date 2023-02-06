@@ -10,12 +10,12 @@ const route = this.shadowRoot.querySelector('router-outlet') // base?
 route.urls = [
  
   { 
-    path: 'customer', 
-    component: 'customer-main', 
+    path: '', 
+    component: 'layout-main', 
     children: [
       { 
-        path: '', 
-        loadComponent: () => import("./customers/customerMain") 
+        path: 'customer', 
+        component: 'customer-main'
       }
     ] 
   },
@@ -27,9 +27,6 @@ route.urls = [
 
 ```html
 
-<button ${ push('/home') }> Go </button>
-
-<!-- or -->
 <router-link go="/home">
   <button> Go </button>
 </router-link>
