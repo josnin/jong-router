@@ -11,7 +11,8 @@ route.urls = [
  
   { 
     path: '', 
-    component: 'layout-main', 
+    comp: 'layout-main',
+    html: `<div></di>`
     children: [
       { 
         path: 'customer', 
