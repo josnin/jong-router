@@ -1,5 +1,14 @@
 # jong-router
-[Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components) Router 
+A lightweight and flexible router built with web components, empowering seamless navigation in your web applications. Simplify routing and enhance user experience with a minimalistic yet powerful solution
+
+### Key Features:
+
+* Simple integration with web components architecture
+* Dynamic routing for single page applications
+* Customizable route configurations
+* Efficient and smooth navigation transitions
+
+### Getting Started:
 
 ```js
 
