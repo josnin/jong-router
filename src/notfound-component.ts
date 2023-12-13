@@ -6,7 +6,7 @@ export const attachShadow: ShadowRootInit = {
     delegatesFocus: true 
 }
 
-class NotFound extends HTMLElement {
+export default class NotFound extends HTMLElement {
     constructor() {
       super()
       this.attachShadow(attachShadow)

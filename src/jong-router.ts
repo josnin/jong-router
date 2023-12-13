@@ -1,16 +1,12 @@
-// web-components-router.ts
+// jong-router.ts
 
 class JongRouter {
 
-  private componentsPath: string;
-
-  private routes: { pattern: string; component: string }[];
+  private routes: { pattern: string; component: Promise<any> }[];
 
 
 
-  constructor(componentsPath: string, routes: { pattern: string; component: string }[]) {
-
-    this.componentsPath = componentsPath;
+  constructor(routes: { pattern: string; component: Promise<any> }[]) {
 
     this.routes = routes;
 
@@ -56,7 +52,7 @@ class JongRouter {
 
     } else {
 
-      this.loadComponent('notfound-component');
+      this.loadComponent(Promise.reject('Component not found')); // Reject if no route matches
 
     }
 
@@ -64,15 +60,17 @@ class JongRouter {
 
 
 
-  private loadComponent(componentName: string): void {
+  private loadComponent(componentImport: Promise<any>): void {
 
-    import(`${this.componentsPath}${componentName}`)
+    componentImport
 
       .then(module => {
 
-        const component = document.createElement(componentName);
+        console.log(module.default)
+        const ComponentClass = module.default;
+        const component = new ComponentClass;
+        //const component = document.createElement(module.default.name);
 
-        console.log(JSON.stringify(this.getRouteParams()));
         component.setAttribute('route-params', JSON.stringify(this.getRouteParams()));
 
         document.getElementById('app')!.innerHTML = '';

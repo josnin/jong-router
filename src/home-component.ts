@@ -3,7 +3,7 @@ export const attachShadow: ShadowRootInit = {
     delegatesFocus: true 
 }
 
-class Home extends HTMLElement {
+export default class Home extends HTMLElement {
     constructor() {
       super()
       this.attachShadow(attachShadow)
