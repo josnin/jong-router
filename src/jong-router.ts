@@ -87,24 +87,18 @@ class JongRouter {
 
   private handleLinkClick(event: Event): void {
 
-    if (event.target instanceof HTMLAnchorElement && event.target.getAttribute('href')) {
+    if ((event.target instanceof HTMLAnchorElement || event.target instanceof HTMLButtonElement) && event.target.getAttribute('router-link') !== null) {
 
+      event.preventDefault();
+      const href = event.target.getAttribute('href') || event.target.getAttribute('data-href');
 
-      const disableRouter = event.target.hasAttribute('data-disable-router')
-
-      if (!disableRouter) {
-        event.preventDefault();
-        const href = event.target.getAttribute('href');
-
-        window.history.pushState({}, '', href);
-        this.navigate();
-
-      }
-
+      window.history.pushState({}, '', href);
+      this.navigate();
 
     }
 
   }
+
 
 
 

@@ -18,16 +18,14 @@
 
 
 
-  <a href="/">Home</a> | <a href="/about">About</a> | <a href="/about/team/developer">Team (Developer)</a> | <a href="/profile/johndoe">Profile (John Doe)</a>
+  <a router-link href="/">Home</a> | <a router-link href="/about">About</a> | <a router-link href="/about/team/developer">Team (Developer)</a> | <a href="/profile/johndoe" router-link>Profile (John Doe)</a>
 
 
 
   <div id="app"></div>
 
 
-
-    <button onclick="router.navigateTo('/about')">Go to About</button>
-
+    <button router-link data-href="/about">Go to About</button>
 
 
     <script type="module">
