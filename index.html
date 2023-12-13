@@ -1,0 +1,77 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Web Components Router</title>
+
+</head>
+
+<body>
+
+
+
+  <a href="/">Home</a> | <a href="/about">About</a> | <a href="/about/team/developer">Team (Developer)</a> | <a href="/profile/johndoe">Profile (John Doe)</a>
+
+
+
+  <div id="app"></div>
+
+
+
+  <button onclick="router.navigateTo('/about')">Go to About</button>
+
+
+
+  <script type="module">
+
+    // Import the JongRouter class
+
+    import JongRouter from './src/jong-router';
+
+
+
+    // Configurable variables
+
+    //const componentsPath = './components/';
+    const componentsPath = './';
+
+    const routes = [
+
+      { pattern: '/', component: 'home-component' },
+
+      { pattern: '/about', component: 'about-component' },
+
+      { pattern: '/about/team', component: 'team-component' },
+
+      { pattern: '/profile', component: 'profile-component' },
+
+    ];
+
+
+
+    // Create an instance of the WebComponentsRouter class
+
+    const router = new JongRouter(componentsPath, routes);
+
+
+
+    // Initialize the router
+
+    router.init();
+
+  </script>
+
+
+
+</body>
+
+</html>
+

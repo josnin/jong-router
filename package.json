@@ -1,0 +1,36 @@
+{
+  "name": "jong-router",
+  "version": "0.0.1",
+  "description": "A lightweight and flexible router built with web components, empowering seamless navigation in your web applications. Simplify routing and enhance user experience with a minimalistic yet powerful solution",
+  "keywords": [
+    "jong-router",
+    "web components router",
+    "custom elements"
+  ],
+  "main": "dist/jong.min.js",
+  "types": "dist/jong.d.ts",
+  "type": "module",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "scripts": {
+    "dev": "node node_modules/vite/bin/vite.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/josnin/jong-router.git"
+  },
+  "author": "josnin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/josnin/jong-router/issues"
+  },
+  "homepage": "https://github.com/josnin/jong-router#readme",
+  "devDependencies": {
+    "@types/node": "^18.11.14",
+    "esbuild": "^0.16.4",
+    "rimraf": "^4.1.2",
+    "typescript": "^4.9.5",
+    "vite": "^4.1.1"
+  }
+}
