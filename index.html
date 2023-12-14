@@ -18,39 +18,52 @@
 
 
 
-  <a router-link href="/">Home</a> | <a router-link href="/about">About</a> | <a router-link href="/about/team/developer">Team (Developer)</a> | <a href="/profile/johndoe" router-link>Profile (John Doe)</a>
+  <a href="/about" router-link>About</a>
+  <a href="/about/team1" router-link>About Team1</a>
+  <a href="/profile/nino" router-link>Profile</a>
+
+  <button is="router-link" href="/about">Go to About</button>
 
 
 
   <div id="app"></div>
 
 
-    <button router-link data-href="/about">Go to About</button>
+
+  <script type="module">
+
+    // Import the WebComponentsRouter class
+
+    import JongRouter from './src/jong-router.ts';
 
 
-    <script type="module">
 
-    import JongRouter from './src/jong-router';
-
-
+    // Configurable variables
 
     const routes = [
 
       { pattern: '/', component: import('./src/home-component') },
 
       { pattern: '/about', component: import('./src/about-component') },
+      { pattern: '/abc/:def/:a', component: import('./src/about-component') },
 
-      { pattern: '/about/team', component: import('./src/team-component') },
+      { pattern: '/about/:teamId', component: import('./src/team-component') },
 
-      { pattern: '/profile', component: import('./src/profile-component') },
+      { pattern: '/profile/:username', component: import('./src/profile-component') },
 
-  ];
+    ];
 
 
 
-  const router = new JongRouter(routes);
+    // Create an instance of the WebComponentsRouter class
 
-  router.init();
+    const router = new JongRouter(routes);
+
+
+
+    // Initialize the router
+
+    router.init();
 
   </script>
 
@@ -59,4 +72,3 @@
 </body>
 
 </html>
-

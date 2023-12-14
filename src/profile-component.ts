@@ -6,10 +6,19 @@ export const attachShadow: ShadowRootInit = {
 }
 
 export default class Profile extends HTMLElement {
+    router: any;
     constructor() {
       super()
       this.attachShadow(attachShadow)
-      this.shadowRoot!.innerHTML = 'Profile page'
+    }
+
+    connectedCallback() {
+      console.log("Custom element added to page.");
+      // @ts-ignore
+      const routeParams = JSON.parse(this.getAttribute('route-params'));
+      console.log(routeParams)
+      this.shadowRoot!.innerHTML = `Profile component, routeParams is ${JSON.stringify(routeParams)}`
+      this.router.navigateTo('/about')
     }
 
 }
