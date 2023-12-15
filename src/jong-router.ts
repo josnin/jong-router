@@ -1,5 +1,12 @@
 // jong-router.ts
 
+interface IRoute {
+  pattern: string;
+  component?: Promise<any>;
+  html?: string;
+  guard?: () => boolean;
+  redirectTo?: string;
+}
 
 
 class JongRouter {
@@ -40,7 +47,7 @@ class JongRouter {
 
     const path = window.location.pathname;
 
-    const matchedRoute = this.routes.find(route => this.matchRoute(route.pattern, path));
+    const matchedRoute: IRoute | undefined  = this.routes.find(route => this.matchRoute(route.pattern, path));
 
     //console.log(`matchedRoute? > ${matchedRoute}`)
     //console.log(`matchedRoute.component > ${matchedRoute?.component}`)
@@ -51,17 +58,32 @@ class JongRouter {
 
     if (matchedRoute) {
 
-      this.loadComponent(matchedRoute.component, this.extractRouteParams(matchedRoute.pattern, path));
+      if (matchedRoute.guard && !matchedRoute.guard.call(this)) {
+        if (matchedRoute.redirectTo) {
+          this.navigateTo(matchedRoute.redirectTo);
+        } else {
+          console.warn('Guard prevented navigation, and no redirect route specified!');
+        }
+        return;
+      }
 
-    } else {
-
-      this.loadComponent(Promise.reject('Component not found'), {});
+      if (matchedRoute.component) {
+        this.loadComponent(matchedRoute.component, this.extractRouteParams(matchedRoute.pattern, path));
+      } else if (matchedRoute.html) {
+        this.loadContent(matchedRoute.html)
+      } else {
+        console.warn('No matching route found!')
+      }
 
     }
 
   }
 
 
+  private loadContent(html: string): void {
+    const app = document.getElementById('app');
+    if (app) app.innerHTML = html;
+  }
 
   private async loadComponent(componentImport: Promise<any>, params: { [key: string]: string }): Promise<void> {
 
@@ -168,5 +190,6 @@ class JongRouter {
 
 
 // Export the class for reuse
+export { IRoute }
 
 export default JongRouter;

@@ -1,18 +1,36 @@
 // Import the JongRouter class
 
-import JongRouter from './src/jong-router';
+import JongRouter, { IRoute } from './src/jong-router';
+import { authencationGuard } from './src/guard';
 
 
 
 // Configurable variables
 
-const routes: any = [
+const routes: IRoute[] = [
 
     { pattern: '/', component: import('./src/home-component') },
 
     { pattern: '/about', component: import('./src/about-component') },
-    { pattern: '/about/:teamId', component: import('./src/team-component') },
+    { pattern: '/tryguard1/:teamId', 
+      component: import('./src/team-component'),
+      guard: authencationGuard,
+      redirectTo: '/unauthorized'
+    },
+    { pattern: '/tryguard2/:teamId', 
+      component: import('./src/team-component'),
+      guard: () => {
+        const isAuthenticated = false;
+        if (!isAuthenticated) {
+            window.history.pushState({}, '', '/unauthorized');
+            //this.navigateTo('/unauthorized');
+            return false;
+        }
+        return true;
+      },
+    },
 
+    { pattern: '/unauthorized', html: ` Unauthorized user `},
     { pattern: '/profile/:username', component: import('./src/profile-component') },
 
 ];
