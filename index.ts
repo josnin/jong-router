@@ -15,19 +15,10 @@ const routes: IRoute[] = [
     { pattern: '/tryguard1/:teamId', 
       component: import('./src/team-component'),
       guard: authencationGuard,
-      redirectTo: '/unauthorized'
+      redirect: '/unauthorized'
     },
     { pattern: '/tryguard2/:teamId', 
-      component: import('./src/team-component'),
-      guard: () => {
-        const isAuthenticated = false;
-        if (!isAuthenticated) {
-            window.history.pushState({}, '', '/unauthorized');
-            //this.navigateTo('/unauthorized');
-            return false;
-        }
-        return true;
-      },
+      redirect: '/unauthorized'
     },
 
     { pattern: '/unauthorized', html: ` Unauthorized user `},

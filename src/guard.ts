@@ -2,7 +2,7 @@
 function authencationGuard(this: any): boolean {
   const isAuthenticated = false;
 
-  console.log(this)
+  console.log(this.navigateTo('/about'))
 
   return isAuthenticated;
 

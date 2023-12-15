@@ -5,7 +5,7 @@ interface IRoute {
   component?: Promise<any>;
   html?: string;
   guard?: () => boolean;
-  redirectTo?: string;
+  redirect?: string;
 }
 
 
@@ -58,9 +58,9 @@ class JongRouter {
 
     if (matchedRoute) {
 
-      if (matchedRoute.guard && !matchedRoute.guard.call(this)) {
-        if (matchedRoute.redirectTo) {
-          this.navigateTo(matchedRoute.redirectTo);
+      if (matchedRoute.guard && !matchedRoute.guard.bind(this)()) {
+        if (matchedRoute.redirect) {
+          this.navigateTo(matchedRoute.redirect);
         } else {
           console.warn('Guard prevented navigation, and no redirect route specified!');
         }
