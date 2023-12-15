@@ -1,5 +1,5 @@
 # jong-router
-A lightweight and flexible router built with web components, empowering seamless navigation in your web applications. Simplify routing and enhance user experience with a minimalistic yet powerful solution
+Simplified web components router, enhance user experience with a minimalistic yet powerful solution
 
 ### Key Features:
 

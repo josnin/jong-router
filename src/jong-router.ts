@@ -1,5 +1,7 @@
 // jong-router.ts
 
+
+
 class JongRouter {
 
   private routes: { pattern: string; component: Promise<any> }[];
@@ -28,7 +30,7 @@ class JongRouter {
 
     window.addEventListener('popstate', () => this.navigate());
 
-    document.addEventListener('click', (event) => this.handleLinkClick(event));
+    document.addEventListener('click', (event) => this.handleClick(event));
 
   }
 
@@ -91,7 +93,7 @@ class JongRouter {
 
 
 
-  private handleLinkClick(event: Event): void {
+  private handleClick(event: Event): void {
 
     if (
 
