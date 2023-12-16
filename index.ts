@@ -32,7 +32,7 @@ const routes: IRoute[] = [
 
 // Create an instance of the WebComponentsRouter class
 
-const router = new JongRouter(routes);
+const router = new JongRouter(routes, 'app');
 
 
 

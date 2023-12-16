@@ -1,23 +1,37 @@
 // jong-router.ts
 
 interface IRoute {
+
+  // url path to match
   pattern: string;
+
+  // use component based to defin the app content
   component?: Promise<any>;
+
+  // use html element to define the app content
   html?: string;
+
   guards?: (() => boolean)[];
+
+  // mostly use for guard side effects
   redirect?: string;
+
+  // additional data to pass to components
+  data?: any; 
 }
 
 
 class JongRouter {
 
   private routes: IRoute[];
+  private app: string;
 
 
 
-  constructor(routes: IRoute[]) {
+  constructor(routes: IRoute[], app: string) {
 
     this.routes = routes;
+    this.app = app;
 
   }
 
@@ -52,7 +66,7 @@ class JongRouter {
     //console.log(`matchedRoute? > ${matchedRoute}`)
     //console.log(`matchedRoute.component > ${matchedRoute?.component}`)
 
-    const app = document.getElementById('app');
+    const app = document.getElementById(this.app);
 
 
 
@@ -96,7 +110,7 @@ class JongRouter {
 
 
   private loadContent(html: string): void {
-    const app = document.getElementById('app');
+    const app = document.getElementById(this.app);
     if (app) app.innerHTML = html;
   }
 
@@ -113,16 +127,16 @@ class JongRouter {
         component.setAttribute('route-params', JSON.stringify(params));
         component.router = this;
 
-        document.getElementById('app')!.innerHTML = '';
+        document.getElementById(this.app)!.innerHTML = '';
 
-        document.getElementById('app')!.appendChild(component);
+        document.getElementById(this.app)!.appendChild(component);
 
 
       })
 
       .catch(error => { 
         console.error(`Error loading component: ${error}`);
-        document.getElementById('app')!.innerHTML = 'Component not found'
+        document.getElementById(this.app)!.innerHTML = 'Component not found'
 
       });
 
