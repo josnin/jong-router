@@ -23,7 +23,10 @@ const routes: IRoute[] = [
     },
 
     { pattern: '/login', html: ` Pls login first! `},
-    { pattern: '/profile/:username', component: import('./src/profile-component') },
+    { pattern: '/profile/:username', 
+      component: import('./src/profile-component'),
+      data: { abc: 1}
+    },
     { pattern: '**', component: import('./src/profile-component') },
 
 ];

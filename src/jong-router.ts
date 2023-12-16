@@ -92,7 +92,7 @@ class JongRouter {
       }
 
       if (matchedRoute.component) {
-        this.loadComponent(matchedRoute.component, this.extractRouteParams(matchedRoute.pattern, path));
+        this.loadComponent(matchedRoute.component, this.extractRouteParams(matchedRoute.pattern, path), matchedRoute.data);
       } else if (matchedRoute.html) {
         this.loadContent(matchedRoute.html)
       } else {
@@ -114,7 +114,7 @@ class JongRouter {
     if (app) app.innerHTML = html;
   }
 
-  private async loadComponent(componentImport: Promise<any>, params: { [key: string]: string }): Promise<void> {
+  private async loadComponent(componentImport: Promise<any>, params: { [key: string]: string }, data: { [key: string]: string }): Promise<void> {
 
     componentImport
 
@@ -124,7 +124,8 @@ class JongRouter {
 
         const component = new ComponentClass();
 
-        component.setAttribute('route-params', JSON.stringify(params));
+        if (params) component.setAttribute('route-params', JSON.stringify(params));
+        if (data) component.setAttribute('route-data', JSON.stringify(data));
         component.router = this;
 
         document.getElementById(this.app)!.innerHTML = '';
