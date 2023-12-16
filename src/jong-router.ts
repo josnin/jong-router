@@ -4,18 +4,18 @@ interface IRoute {
   pattern: string;
   component?: Promise<any>;
   html?: string;
-  guard?: () => boolean;
+  guards?: (() => boolean)[];
   redirect?: string;
 }
 
 
 class JongRouter {
 
-  private routes: { pattern: string; component: Promise<any> }[];
+  private routes: IRoute[];
 
 
 
-  constructor(routes: { pattern: string; component: Promise<any> }[]) {
+  constructor(routes: IRoute[]) {
 
     this.routes = routes;
 
@@ -58,13 +58,23 @@ class JongRouter {
 
     if (matchedRoute) {
 
-      if (matchedRoute.guard && !matchedRoute.guard.bind(this)()) {
-        if (matchedRoute.redirect) {
-          this.navigateTo(matchedRoute.redirect);
-        } else {
-          console.warn('Guard prevented navigation, and no redirect route specified!');
-        }
-        return;
+      if (matchedRoute.guards) {
+        const guardsRes = matchedRoute.guards.every(guard => {
+          const guardFn = guard.bind(this)();
+          if (!guardFn) {
+            if (matchedRoute.redirect) {
+              this.navigateTo(matchedRoute.redirect);
+            } else {
+              console.warn('Guard prevented navigation, and no redirect route specified!');
+            }
+          }
+          return guardFn === true;
+        });
+
+        // dont proceed if
+        // aggregate result is false
+        if (guardsRes === false) return;
+
       }
 
       if (matchedRoute.component) {
@@ -72,6 +82,11 @@ class JongRouter {
       } else if (matchedRoute.html) {
         this.loadContent(matchedRoute.html)
       } else {
+        // TODO?
+        //const notFoundRoute: IRoute | undefined = this.routes.find(route => route.pattern === '**');
+        //if (notFoundRoute) {
+        //  this.loadComponent(notFoundRoute.component, {})
+        //}
         console.warn('No matching route found!')
       }
 

@@ -1,7 +1,7 @@
 // Import the JongRouter class
 
 import JongRouter, { IRoute } from './src/jong-router';
-import { authencationGuard } from './src/guard';
+import { authencationGuard, sessionGuard } from './src/guard';
 
 
 
@@ -14,15 +14,17 @@ const routes: IRoute[] = [
     { pattern: '/about', component: import('./src/about-component') },
     { pattern: '/tryguard1/:teamId', 
       component: import('./src/team-component'),
-      guard: authencationGuard,
-      redirect: '/unauthorized'
+      guards: [authencationGuard, sessionGuard],
+      redirect: '/login'
     },
     { pattern: '/tryguard2/:teamId', 
-      redirect: '/unauthorized'
+      component: import('./src/team-component'),
+      redirect: '/login'
     },
 
-    { pattern: '/unauthorized', html: ` Unauthorized user `},
+    { pattern: '/login', html: ` Pls login first! `},
     { pattern: '/profile/:username', component: import('./src/profile-component') },
+    { pattern: '**', component: import('./src/profile-component') },
 
 ];
 
