@@ -27,7 +27,7 @@ const routes: IRoute[] = [
       component: import('./src/profile-component'),
       data: { abc: 1}
     },
-    { pattern: '**', component: import('./src/profile-component') },
+    { pattern: '**', html: ` Page not found!` }
 
 ];
 

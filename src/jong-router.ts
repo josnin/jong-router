@@ -63,9 +63,6 @@ class JongRouter {
 
     const matchedRoute: IRoute | undefined  = this.routes.find(route => this.matchRoute(route.pattern, path));
 
-    //console.log(`matchedRoute? > ${matchedRoute}`)
-    //console.log(`matchedRoute.component > ${matchedRoute?.component}`)
-
     const app = document.getElementById(this.app);
 
 
@@ -96,14 +93,22 @@ class JongRouter {
       } else if (matchedRoute.html) {
         this.loadContent(matchedRoute.html)
       } else {
-        // TODO?
-        //const notFoundRoute: IRoute | undefined = this.routes.find(route => route.pattern === '**');
-        //if (notFoundRoute) {
-        //  this.loadComponent(notFoundRoute.component, {})
-        //}
-        console.warn('No matching route found!')
+        console.warn('no component or html route specified!')
       }
 
+      return;
+
+    }
+
+    // to handle users navigating to a path not defined in the routes
+    // example page not found
+    const notMatchedRoute: IRoute | undefined = this.routes.find(route => route.pattern === '**');
+    if (notMatchedRoute) {
+      if (notMatchedRoute.component) {
+        this.loadComponent(notMatchedRoute.component, this.extractRouteParams(notMatchedRoute.pattern, path), notMatchedRoute.data);
+      } else if (notMatchedRoute.html) {
+        this.loadContent(notMatchedRoute.html)
+      }
     }
 
   }
