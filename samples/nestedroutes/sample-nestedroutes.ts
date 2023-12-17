@@ -1,14 +1,9 @@
 import JongRouter, { IRoute } from '../../src/jong-router';
 
-export const attachShadow: ShadowRootInit = {
-    mode: 'open', 
-    delegatesFocus: true 
-}
-
 export default class SampleNestedRoutes extends HTMLElement {
     constructor() {
       super()
-      this.attachShadow(attachShadow)
+      this.attachShadow({ mode: 'open'})
       this.shadowRoot!.innerHTML = `
         <h2>Sample Nested Routes</h2>
         <nav>
