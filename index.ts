@@ -10,7 +10,7 @@ import { authencationGuard, sessionGuard } from './src/guard';
 const routes: IRoute[] = [
 
 
-    { pattern: '/nestedroutes/c1', component: import('./samples/nestedroutes/child-routes') },
+    { pattern: '/nestedroutes/c1', component: import('./samples/nestedroutes/sample-nestedroutes') },
     { pattern: '/tryguard1/:teamId', 
       component: import('./src/team-component'),
       guards: [authencationGuard, sessionGuard],
@@ -34,7 +34,7 @@ const routes: IRoute[] = [
 
 // Create an instance of the WebComponentsRouter class
 
-const router = new JongRouter(routes, document.getElementById('app'));
+const router = new JongRouter(routes, document.getElementById('app')!);
 
 
 

@@ -24,16 +24,16 @@ interface IRoute {
 class JongRouter {
 
   private routes: IRoute[];
-  private outlet: HTMLElement | null;
-  private sr: ShadowRoot | null | undefined;
+  private outlet: HTMLElement;
+  private shadowRoot1: ShadowRoot | undefined;
 
 
 
-  constructor(routes: IRoute[], outlet: HTMLElement | null, sr?: ShadowRoot | null) {
+  constructor(routes: IRoute[], outlet: HTMLElement, shadowRoot1?: ShadowRoot | undefined) {
 
     this.routes = routes;
     this.outlet = outlet;
-    this.sr = sr;
+    this.shadowRoot1 = shadowRoot1;
 
   }
 
@@ -61,8 +61,6 @@ class JongRouter {
 
 
   private navigate(): void {
-
-    console.log(55555)
 
     const path = window.location.pathname;
 
@@ -158,8 +156,8 @@ class JongRouter {
 
   private handleClick(event: Event): void {
 
-    /// @ts-ignore
-    const isInsideShadowDom = event.composedPath().includes(this.sr)
+    // @ts-ignore
+    const isInsideShadowDom = event.composedPath().includes(this.shadowRoot1)
     const target = isInsideShadowDom ? event.composedPath()[0] : event.target;
 
 
@@ -183,7 +181,6 @@ class JongRouter {
     }
 
   }
-
 
 
   private matchRoute(pattern: string, path: string): boolean {
