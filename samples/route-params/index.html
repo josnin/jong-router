@@ -6,24 +6,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sample Nested Routes</title>
+  <title>Sample Passing Root Params to Components</title>
 </head>
 
 <body>
 
-  <a href="/nestedroutes/c1" router-link>Sample Nested Routes</a>
-  <a href="/about" router-link>About</a>
+  <a href="/profile/joe" router-link>Profile</a>
+  <a href="/about" router-link>Page not found</a>
 
   <div id="app"></div>
 
   <script type="module">
     // Import the JongRouter class
-    import JongRouter from './src/jong-router';
+    import JongRouter from '../../src/jong-router';
 
     // Configurable variables
     const routes = [
-        { pattern: '/nestedroutes/c1', component: import('./samples-nestedroutes') },
-        { pattern: '/about', html: ` Welcome About page` },
+        {   pattern: '/profile/:username', component: import('./profile-component') },
         { pattern: '**', html: ` Page not found!` }
     ];
 
