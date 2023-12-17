@@ -2,7 +2,6 @@
 
 import JongRouter, { IRoute } from './src/jong-router';
 import { authencationGuard, sessionGuard } from './src/guard';
-import './samples/layout1/layout1-container';
 
 
 
@@ -11,7 +10,7 @@ import './samples/layout1/layout1-container';
 const routes: IRoute[] = [
 
 
-    { pattern: '/layout1/coke', component: import('./samples/layout1/layout1-container') },
+    { pattern: '/nestedroutes/c1', component: import('./samples/nestedroutes/child-routes') },
     { pattern: '/tryguard1/:teamId', 
       component: import('./src/team-component'),
       guards: [authencationGuard, sessionGuard],

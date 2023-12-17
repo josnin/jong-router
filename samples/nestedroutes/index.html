@@ -1,0 +1,38 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sample Nested Routes</title>
+</head>
+
+<body>
+
+  <a href="/nestedroutes/c1" router-link>Sample Nested Routes</a>
+  <a href="/about" router-link>About</a>
+
+  <div id="app"></div>
+
+  <script type="module">
+    // Import the JongRouter class
+    import JongRouter from './src/jong-router';
+
+    // Configurable variables
+    const routes = [
+        { pattern: '/nestedroutes/c1', component: import('./samples/nestedroutes/child-routes') },
+        { pattern: '/about', html: ` Welcome About page` },
+        { pattern: '**', html: ` Page not found!` }
+    ];
+
+    // Create an instance of the JongRouter class
+    const router = new JongRouter(routes, document.getElementById('app'));
+
+    // Initialize the router
+    router.init();
+  </script>
+</body>
+
+</html>
