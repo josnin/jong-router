@@ -2,6 +2,7 @@
 
 import JongRouter, { IRoute } from './src/jong-router';
 import { authencationGuard, sessionGuard } from './src/guard';
+import './samples/layout1/layout1-container';
 
 
 
@@ -9,9 +10,8 @@ import { authencationGuard, sessionGuard } from './src/guard';
 
 const routes: IRoute[] = [
 
-    { pattern: '/', component: import('./src/home-component') },
 
-    { pattern: '/about', component: import('./src/about-component') },
+    { pattern: '/layout1/coke', component: import('./samples/layout1/layout1-container') },
     { pattern: '/tryguard1/:teamId', 
       component: import('./src/team-component'),
       guards: [authencationGuard, sessionGuard],
@@ -35,7 +35,7 @@ const routes: IRoute[] = [
 
 // Create an instance of the WebComponentsRouter class
 
-const router = new JongRouter(routes, 'app');
+const router = new JongRouter(routes, document.getElementById('app'));
 
 
 

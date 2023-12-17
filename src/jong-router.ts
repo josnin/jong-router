@@ -24,14 +24,16 @@ interface IRoute {
 class JongRouter {
 
   private routes: IRoute[];
-  private app: string;
+  private outlet: HTMLElement | null;
+  private sr: ShadowRoot | null | undefined;
 
 
 
-  constructor(routes: IRoute[], app: string) {
+  constructor(routes: IRoute[], outlet: HTMLElement | null, sr?: ShadowRoot | null) {
 
     this.routes = routes;
-    this.app = app;
+    this.outlet = outlet;
+    this.sr = sr;
 
   }
 
@@ -51,6 +53,7 @@ class JongRouter {
 
     window.addEventListener('popstate', () => this.navigate());
 
+
     document.addEventListener('click', (event) => this.handleClick(event));
 
   }
@@ -59,12 +62,11 @@ class JongRouter {
 
   private navigate(): void {
 
+    console.log(55555)
+
     const path = window.location.pathname;
 
     const matchedRoute: IRoute | undefined  = this.routes.find(route => this.matchRoute(route.pattern, path));
-
-    const app = document.getElementById(this.app);
-
 
 
     if (matchedRoute) {
@@ -115,8 +117,9 @@ class JongRouter {
 
 
   private loadContent(html: string): void {
-    const app = document.getElementById(this.app);
-    if (app) app.innerHTML = html;
+    //const app = document.getElementById(this.app);
+    //if (app) app.innerHTML = html;
+    this.outlet.innerHTML = html;
   }
 
   private async loadComponent(componentImport: Promise<any>, params: { [key: string]: string }, data: { [key: string]: string }): Promise<void> {
@@ -133,16 +136,19 @@ class JongRouter {
         if (data) component.setAttribute('route-data', JSON.stringify(data));
         component.router = this;
 
-        document.getElementById(this.app)!.innerHTML = '';
+        //document.getElementById(this.app)!.innerHTML = '';
+        this.outlet.innerHTML = '';
 
-        document.getElementById(this.app)!.appendChild(component);
+        //document.getElementById(this.app)!.appendChild(component);
+        this.outlet.appendChild(component);
 
 
       })
 
       .catch(error => { 
         console.error(`Error loading component: ${error}`);
-        document.getElementById(this.app)!.innerHTML = 'Component not found'
+        //document.getElementById(this.app)!.innerHTML = 'Component not found'
+        this.outlet.innerHTML = 'Component not found'
 
       });
 
@@ -152,17 +158,23 @@ class JongRouter {
 
   private handleClick(event: Event): void {
 
+    /// @ts-ignore
+    const isInsideShadowDom = event.composedPath().includes(this.sr)
+    const target = isInsideShadowDom ? event.composedPath()[0] : event.target;
+
+
     if (
 
-      (event.target instanceof HTMLAnchorElement || event.target instanceof HTMLButtonElement) &&
+      (target instanceof HTMLAnchorElement || target instanceof HTMLButtonElement) &&
 
-      event.target.hasAttribute('router-link')
+      target.hasAttribute('router-link')
 
     ) {
 
       event.preventDefault();
 
-      const href = event.target.getAttribute('href');
+      //const href = event.target.getAttribute('href');
+      const href = target.getAttribute('href');
 
       window.history.pushState({}, '', href);
 
