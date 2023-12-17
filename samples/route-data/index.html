@@ -1,3 +1,4 @@
+
 <!-- index.html -->
 
 <!DOCTYPE html>
@@ -6,13 +7,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sample Passing Route Params to Components</title>
+  <title>Sample Passing Route Data to Components</title>
 </head>
 
 <body>
 
-  <a href="/profile/joe" router-link>Profile</a>
-  <a href="/about" router-link>Page not found</a>
+  <a href="/history" router-link>History</a>
 
   <div id="app"></div>
 
@@ -22,7 +22,10 @@
 
     // Configurable variables
     const routes = [
-        {   pattern: '/profile/:username', component: import('./profile-component') },
+        {   pattern: '/history', 
+            component: import('./history-component'),
+            data: { abc: 1}
+        },
         { pattern: '**', html: ` Page not found!` }
     ];
 
