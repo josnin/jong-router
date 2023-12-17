@@ -1,0 +1,41 @@
+
+<!-- index.html -->
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add router-link to Navigate without reloading the page</title>
+</head>
+
+<body>
+
+  <a href="/nav" router-link>Nav</a>
+  <a href="/about" router-link>Page not found</a>
+
+  <button router-link href="/nav">Go to Nav</button>
+  <button router-link href="/abc">Not existing url</button>
+
+  <div id="app"></div>
+
+  <script type="module">
+    // Import the JongRouter class
+    import JongRouter from '../../src/jong-router';
+
+    // Configurable variables
+    const routes = [
+        { pattern: '/nav', html: ` Welcome to Navigation page` },
+        { pattern: '**', html: ` Page not found!` }
+    ];
+
+    // Create an instance of the JongRouter class
+    const router = new JongRouter(routes, document.getElementById('app'));
+
+    // Initialize the router
+    router.init();
+  </script>
+</body>
+
+</html>
