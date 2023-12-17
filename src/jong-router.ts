@@ -129,9 +129,11 @@ class JongRouter {
         const ComponentClass = module.default;
 
         const component = new ComponentClass();
+        const queryParams = this.extractQueryParams()
 
         if (params) component.setAttribute('route-params', JSON.stringify(params));
         if (data) component.setAttribute('route-data', JSON.stringify(data));
+        if (queryParams) component.setAttribute('query-params', JSON.stringify(queryParams));
         component.router = this;
 
         //document.getElementById(this.app)!.innerHTML = '';
@@ -198,6 +200,16 @@ class JongRouter {
 
       );
 
+  }
+
+  private extractQueryParams():  { [key:string]: string } {
+    const queryString = window.location.search;
+    const params = new URLSearchParams(queryString);
+    const queryParams: { [key: string]: string } = {};
+    params.forEach( (value, key) => {
+      queryParams[key] = value;
+    })
+    return queryParams;
   }
 
 

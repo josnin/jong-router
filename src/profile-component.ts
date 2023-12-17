@@ -19,6 +19,8 @@ export default class Profile extends HTMLElement {
       console.log(routeParams)
       const routeData = JSON.parse(this.getAttribute('route-data')!);
       console.log(routeData)
+      const queryParams = JSON.parse(this.getAttribute('query-params')!);
+      console.log(queryParams)
       this.shadowRoot!.innerHTML = `Profile component, routeParams is ${JSON.stringify(routeParams)}`
       //this.router.navigateTo('/about')
     }
