@@ -134,12 +134,15 @@ class JongRouter {
         if (params) component.setAttribute('route-params', JSON.stringify(params));
         if (data) component.setAttribute('route-data', JSON.stringify(data));
         if (queryParams) component.setAttribute('query-params', JSON.stringify(queryParams));
+
+        // pass all router functional to components
+        // to reuse functions inside components
         component.router = this;
 
-        //document.getElementById(this.app)!.innerHTML = '';
+        // clean
         this.outlet.innerHTML = '';
 
-        //document.getElementById(this.app)!.appendChild(component);
+        // can only append 
         this.outlet.appendChild(component);
 
 
