@@ -1,0 +1,44 @@
+
+<!-- index.html -->
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sample Multiple Guards</title>
+</head>
+
+<body>
+
+  <a href="/guards/c1" router-link>Sample Guards</a>
+  <a href="/about" router-link>About</a>
+
+  <div id="app"></div>
+
+  <script type="module">
+    // Import the JongRouter class
+    import JongRouter from './src/jong-router';
+    import { authGuard, sessionGuard } from './guards';
+
+    // Configurable variables
+    const routes = [
+        {   pattern: '/guards/c1', 
+            html: ` Welcome Sample Guards`,
+            guards: [authGuard, sessionGuard],
+            redirect: '/login'
+        },
+        { pattern: '/login', html: ` Welcome Login page` },
+        { pattern: '**', html: ` Page not found!` }
+    ];
+
+    // Create an instance of the JongRouter class
+    const router = new JongRouter(routes, document.getElementById('app'));
+
+    // Initialize the router
+    router.init();
+  </script>
+</body>
+
+</html>
