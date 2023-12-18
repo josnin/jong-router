@@ -24,7 +24,7 @@ A lightweight and simple-to-use web components router in Vanilla JavaScript with
 
 - **Route Data**: Include additional data associated with each route. ([Example](https://github.com/josnin/jong-router/tree/main/samples/route-data))
 
-- **Router Link**: Use `<router-link>` to navigate without reloading the page. ([Example](https://github.com/josnin/jong-router/tree/main/samples/router-link))
+- **Router Link**: Use attr `router-link` to navigate without reloading the page. ([Example](https://github.com/josnin/jong-router/tree/main/samples/router-link))
 
 
 
