@@ -73,9 +73,9 @@ npm i jong-router
 
 const router = new JongRouter([
 
-  { path: '/', component: import('./components/HomeComponent') },
+  { pattern: '/', component: import('./components/HomeComponent') },
 
-  { path: '/about', component: import('./components/AboutComponent') },
+  { pattern: '/about', component: import('./components/AboutComponent') },
 
   // Add more routes as needed
 
@@ -153,7 +153,7 @@ const router = new JongRouter([
 
   {
 
-    path: '/dashboard',
+    pattern: '/dashboard',
 
     component: import('./components/DashboardComponent'),
 
@@ -163,7 +163,7 @@ const router = new JongRouter([
 
   },
 
-  { path: '/login', component: import('./components/LoginComponent') }, 
+  { pattern: '/login', component: import('./components/LoginComponent') }, 
   // ...other routes
 
 ]);
