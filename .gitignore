@@ -6,7 +6,7 @@ src/*.js.map
 src/*.d.ts.map
 src/*/*.js
 src/*/*/*.js
-dist/redgin.min.js.map
+dist/jong-router.min.js.map
 *.d.ts
 *.js
 samples/*.js
