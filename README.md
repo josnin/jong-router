@@ -24,7 +24,7 @@ A lightweight and simple-to-use web components router in Vanilla JavaScript with
 
 - **Route Data**: Include additional data associated with each route. ([Example](https://github.com/josnin/jong-router/tree/main/samples/route-data))
 
-- **Router Link**: Use attr `router-link` to navigate without reloading the page. ([Example](https://github.com/josnin/jong-router/tree/main/samples/router-link))
+- **Router Link**: Use attribute `router-link` to navigate without reloading the page. ([Example](https://github.com/josnin/jong-router/tree/main/samples/router-link))
 
 
 
@@ -48,7 +48,7 @@ Include the `jong-router.js` script in your HTML file.
 import JongRouter from 'https://cdn.jsdelivr.net/npm/jong-router@latest/dist/jong-router.min.js'
 
 // or specific version
-import JongRouter from 'https://cdn.jsdelivr.net/npm/jong-router@0.1.12/dist/jong-router.min.js'
+import JongRouter from 'https://cdn.jsdelivr.net/npm/jong-router@0.1.13/dist/jong-router.min.js'
 
 ```
 
@@ -123,7 +123,7 @@ customElements.define('home-component', HomeComponent);
 
 
 
-Use the `<router-link>` element to create navigation links.
+Use the `router-link` attribute to create navigation links.
 
 
 

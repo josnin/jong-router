@@ -1,6 +1,6 @@
 {
   "name": "jong-router",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "A lightweight and simple-to-use web components router in Vanilla JavaScript with support for guards, nested routes, page not found, passing query parameters to components, passing route parameters to components, passing route data to components, and a router link for single-page application navigation without reloading the page.",
   "keywords": [
     "jong-router",
