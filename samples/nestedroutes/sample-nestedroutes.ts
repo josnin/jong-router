@@ -29,7 +29,7 @@ export default class SampleNestedRoutes extends HTMLElement {
       ];
 
       // Create an instance of the JongRouter class
-      const router = new JongRouter(childRoutes, this.shadowRoot!.getElementById('outlet1')!, this.shadowRoot );
+      const router = new JongRouter(childRoutes, this.shadowRoot!.getElementById('outlet1')!, this.shadowRoot! );
 
       // Initialize the router
       router.init();

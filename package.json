@@ -1,20 +1,25 @@
 {
   "name": "jong-router",
-  "version": "0.0.1",
-  "description": "A lightweight and flexible router built with web components, empowering seamless navigation in your web applications. Simplify routing and enhance user experience with a minimalistic yet powerful solution",
+  "version": "0.1.12",
+  "description": "A lightweight and simple-to-use web components router in Vanilla JavaScript with support for guards, nested routes, page not found, passing query parameters to components, passing route parameters to components, passing route data to components, and a router link for single-page application navigation without reloading the page.",
   "keywords": [
     "jong-router",
     "web components router",
     "custom elements"
   ],
-  "main": "dist/jong.min.js",
-  "types": "dist/jong.d.ts",
+  "main": "dist/jong-router.min.js",
+  "types": "dist/jong-router.d.ts",
   "type": "module",
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.18.2"
   },
   "scripts": {
-    "dev": "node node_modules/vite/bin/vite.js"
+    "dev": "node node_modules/vite/bin/vite.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rimraf src/*.js src/*/*.js samples/*.js samples/*/*.js *.d.ts src/*.d.ts src/*/*.d.ts",
+    "build": "npm run clean &&  tsc -w",
+    "bundle": "npx esbuild --bundle src/jong-router.js --minify --sourcemap --format=esm --outfile=dist/jong-router.min.js --target=es2022 && npm run copy",
+    "copy": "cp -rvf src/*.d.ts dist/."
   },
   "repository": {
     "type": "git",
