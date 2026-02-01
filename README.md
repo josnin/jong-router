@@ -1,3 +1,5 @@
+[![NPM](https://nodei.co/npm/jong-router.svg?style=flat&data=v,d&color=red)](https://nodei.co/npm/jong-router/)
+
 # JongRouter
 
 
