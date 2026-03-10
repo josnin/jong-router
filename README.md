@@ -4,29 +4,33 @@
 
 
 
-A lightweight and simple-to-use web components router in Vanilla JavaScript with support for guards, nested routes, page not found, passing query parameters to components, passing route parameters to components, passing route data to components, and a router link for single-page application navigation without reloading the page.
-
+JongRouter is a lightweight client-side router for Web Components, built with Vanilla JavaScript.
+It enables Single Page Application (SPA) navigation without page reloads while staying framework-agnostic.
+Designed for developers who want a simple router for Web Components without bringing in a heavy framework.
 
 
 ## Features
 
-
-
-- **Routing**: Define routes and associate them with components.
-
-- **Guards**: Implement route guards to control navigation based on conditions. ([Example](https://github.com/josnin/jong-router/tree/main/samples/guards))
-
-- **Nested Routes**: Create hierarchical routes for nested components. ([Example](https://github.com/josnin/jong-router/tree/main/samples/nestedroutes))
-
-- **Page Not Found**: Handle routes that do not match any defined route. ([Example](https://github.com/josnin/jong-router/tree/main/samples/page-not-found))
-
-- **Query Parameters**: Pass query parameters to components. ([Example](https://github.com/josnin/jong-router/tree/main/samples/query-params))
-
-- **Route Parameters**: Extract and pass route parameters to components. ([Example](https://github.com/josnin/jong-router/tree/main/samples/route-params))
-
-- **Route Data**: Include additional data associated with each route. ([Example](https://github.com/josnin/jong-router/tree/main/samples/route-data))
-
-- **Router Link**: Use attribute `router-link` to navigate without reloading the page. ([Example](https://github.com/josnin/jong-router/tree/main/samples/router-link))
+* SPA Navigation
+Navigate without reloading the page using the router-link attribute.
+* Route Guards
+Protect routes with custom guard logic before navigation.
+* Nested Routing
+Easily compose child routers inside Web Components.
+* Shadow DOM Support
+Works seamlessly with Web Components using Shadow DOM.
+* Route Parameters
+Dynamic routes like `/profile/:username`.
+* Query Parameters
+Access query strings like `/profile/jong?tab=settings`.
+* Route Data
+Pass static metadata to components.
+* Programmatic Navigation
+Navigate using `router.navigateTo()`.
+* 404 Page Handling
+Built-in fallback route using **.
+* Buttons & Links Support
+Works with both <a> and <button> elements.
 
 
 
@@ -73,19 +77,23 @@ npm i jong-router
 
 ```javascript
 
-const router = new JongRouter([
+const routes = [
 
   { pattern: '/', component: import('./components/HomeComponent') },
 
   { pattern: '/about', component: import('./components/AboutComponent') },
 
-  // Add more routes as needed
+  { pattern: '**', html: `<h2>Page not found</h2>` }
 
-], document.getElementById('app') );
+]
 
+const router = new JongRouter(
+  routes,
+  document.getElementById('app')
+)
 
+router.init()
 
-router.init();
 
 ```
 
@@ -101,21 +109,18 @@ Create your web components for each route.
 
 ```javascript
 
-// Example: HomeComponent.js
-
 class HomeComponent extends HTMLElement {
 
   connectedCallback() {
 
-    this.innerHTML = '<h1>Home Component</h1>';
+    this.innerHTML = `<h1>Home Page</h1>`
 
   }
 
 }
 
+customElements.define('home-component', HomeComponent)
 
-
-customElements.define('home-component', HomeComponent);
 
 ```
 
@@ -139,9 +144,35 @@ Use the `router-link` attribute to create navigation links.
 
 ```
 
+Buttons also work with router-link
+```html
+<button router-link href="/about">
+Go to About
+</button>
+```
+
+4. Programmatic Navigation
+Components can navigate programmatically.
+
+```js
+import { router } from "../router-instance"
+
+router.navigateTo("/profile/admin")
+```
+
+Example inside a component
+```js
+this.shadowRoot
+  .getElementById("btn")
+  .addEventListener("click", () => {
+
+    router.navigateTo("/profile/admin")
+
+  })
+```
 
 
-4. **Guards**
+5. **Guards**
 
 
 
@@ -172,9 +203,11 @@ const router = new JongRouter([
 
 
 
-function isAuthenticated() {
+function isAuthenticated(ctx) {
 
   // Your authentication logic here
+  console.log(ctx.path)
+  console.log(ctx.params)
 
   return true;
 
@@ -184,43 +217,108 @@ function isAuthenticated() {
 
 
 
-5. **Handle Route Parameters and Query Parameters:**
+6. **Handle Route Parameters and Query Parameters:**
 
 
-
-Access route parameters and query parameters in your components.
-
-
-
-```javascript
-
-// Example: UserComponent.js
-
-class UserComponent extends HTMLElement {
-
-  connectedCallback() {
-
-    const routeParams = JSON.parse(this.getAttribute('route-params'));
-
-    const queryParams = JSON.parse(this.getAttribute('query-params'));
-
-
-
-    this.innerHTML = `<h1>User Details</h1>
-
-                      <p>User ID: ${routeParams.id}</p>
-
-                      <p>Query Param: ${queryParams.example}</p>`;
-
-  }
-
+Define dynamic routes Parameter:
+```js
+{
+  pattern: "/profile/:username",
+  component: import("./ProfileComponent")
 }
-
-
-
-customElements.define('user-component', UserComponent);
-
 ```
+
+Access inside the component
+```js
+const params = JSON.parse(
+  this.getAttribute("route-params")
+)
+
+console.log(params.username)
+```
+
+
+Define query parameter
+```js
+/profile/jong?tab=settings
+```
+
+Inside component
+```js
+const query = JSON.parse(
+  this.getAttribute("query-params")
+)
+
+console.log(query.tab)
+```
+
+7. **Route Data**
+Attach metadata to routes
+
+```js
+{
+  pattern: "/profile/:username",
+  component: import("./ProfileComponent"),
+  data: { role: "admin" }
+}
+```
+Access in component
+```js
+const data = JSON.parse(
+  this.getAttribute("route-data")
+)
+```
+
+
+8. **Nested Routes**
+JongRouter supports child routers inside components.
+
+Example
+```bash
+/nested
+   ├─ /nested/c1
+   ├─ /nested/c2
+   └─ /nested/c3
+```
+
+A parent component can create its own router instance
+```js
+const childRouter = new JongRouter(
+  childRoutes,
+  this.shadowRoot.getElementById("outlet"),
+  "/nested",
+  true
+)
+
+childRouter.init()
+```
+
+## Playground & Examples
+Playground & Examples
+The repository contains a Playground demonstrating:
+* Basic routing
+* Guarded routes
+* Nested routes
+* Query parameters
+* Route parameters
+* Programmatic navigation
+* Buttons & router-link navigation
+
+
+# Why JongRouter?
+JongRouter focuses on simplicity and Web Component compatibility.
+Unlike many routers, it:
+* Works without frameworks
+* Supports Shadow DOM
+* Keeps the API extremely small
+* Is easy to embed in micro-frontend architectures
+
+Perfect for:
+* Web Component apps
+* Micro-frontends
+* Lightweight SPAs
+* Vanilla JS projects
+
 
 ## How to run development server? 
 ```

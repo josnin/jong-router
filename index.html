@@ -1,35 +1,416 @@
-<!-- index.html -->
-
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta charset="UTF-8">
+<title>JongRouter Playground</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script type="module" src="./router-instance.ts"></script>
 
-  <title>Web Components Router</title>
-  <script type="module" src="./index"></script>
+<style>
+
+/* -----------------------------
+GLOBAL
+------------------------------ */
+
+:root {
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --bg: #f6f8fb;
+  --card: #ffffff;
+  --border: #e5e7eb;
+  --text: #1f2937;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* -----------------------------
+HEADER
+------------------------------ */
+
+header {
+  background: white;
+  border-bottom: 1px solid var(--border);
+  padding: 24px 40px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+header p {
+  margin-top: 6px;
+  color: #6b7280;
+}
+
+/* -----------------------------
+LAYOUT
+------------------------------ */
+
+.container {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 24px;
+  padding: 32px 40px;
+}
+
+/* -----------------------------
+SIDEBAR
+------------------------------ */
+
+.sidebar {
+  background: var(--card);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  padding: 20px;
+}
+
+.section {
+  margin-bottom: 28px;
+}
+
+.section h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: #6b7280;
+  text-transform: uppercase;
+}
+
+/* -----------------------------
+LINKS
+------------------------------ */
+
+.router-link {
+  display: block;
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--text);
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.router-link:hover {
+  background: #f1f5f9;
+}
+
+.router-link.active {
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* -----------------------------
+BUTTONS
+------------------------------ */
+
+button[router-link] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 6px;
+  border-radius: 6px;
+  border: none;
+  background: var(--primary);
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+button[router-link]:hover {
+  background: var(--primary-hover);
+}
+
+/* -----------------------------
+PLAYGROUND PANEL
+------------------------------ */
+
+.playground {
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+}
+
+.panel {
+  background: white;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  padding: 20px;
+}
+
+.panel h2 {
+  margin-top: 0;
+}
+
+/* router outlet container */
+
+#app {
+  min-height: 200px;
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* -----------------------------
+ROUTE INFO
+------------------------------ */
+
+.route-info {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.route-info span {
+  font-weight: 600;
+  color: #111827;
+}
+
+.router-link.active,
+button[router-link].active {
+
+  background: #eff6ff;
+  border-color: #2563eb;
+  color: #2563eb;
+  font-weight: 600;
+
+}
+
+</style>
 
 </head>
 
 <body>
 
-  <a href="/nestedroutes/c1" router-link>Sample Nested Routes</a>
-  <a href="/tryguard1/team1" router-link>Guard 1 Test</a>
-  <a href="/tryguard2/team1" router-link>Guard 2 Test</a>
-  <a href="/profile/jong?ghg=1" router-link>Profile</a>
+<header>
 
-  <button router-link href="/about">Go to About</button>
-  <button router-link href="/abc">Not existing url</button>
+<h1>JongRouter Playground</h1>
+
+<p>
+A lightweight router designed for Web Components and ScalpelJS applications.
+</p>
+
+</header>
 
 
-  <div id="app"></div>
+<div class="container">
+
+<!-- Sidebar -->
+
+<nav class="sidebar">
+
+<div class="section">
+
+<h3>Basic Routes</h3>
+
+<a router-link class="router-link" href="/about">/about</a>
+
+<a router-link class="router-link" href="/profile/jong">/profile/:username</a>
+
+<a router-link class="router-link" href="/profile/jong?tab=settings">
+/profile with query
+</a>
+
+</div>
 
 
+<div class="section">
+
+<h3>Guards</h3>
+
+<a router-link class="router-link" href="/tryguard1/team1">
+Guard PASS
+</a>
+
+<a router-link class="router-link" href="/tryguard1/blocked">
+Guard BLOCK
+</a>
+
+</div>
+
+
+<div class="section">
+
+<h3>Nested Routes</h3>
+
+<a router-link class="router-link" href="/nested/c1">Nested C1</a>
+
+<a router-link class="router-link" href="/nested/c2">Nested C2</a>
+
+<a router-link class="router-link" href="/nested/c3">Nested C3</a>
+
+</div>
+
+
+<div class="section">
+
+<h3>Buttons</h3>
+
+<button router-link href="/about">Go About</button>
+
+<button router-link href="/profile/admin">Go Profile</button>
+
+</div>
+
+<div class="section">
+  <h3>Programmatic Navigation</h3>
+
+<a router-link class="router-link" href="/programmatic">Programmatic Navigation Demo</a>
+</div>
+
+
+<div class="section">
+
+<h3>Error</h3>
+
+<a router-link class="router-link" href="/unknown">404 Page</a>
+
+</div>
+
+</nav>
+
+
+<!-- Playground -->
+
+<div class="playground">
+
+<div class="panel route-info">
+
+Current Path:
+<span id="current-path"></span>
+
+</div>
+
+<div class="panel route-debug">
+
+<h3>Route Debugger</h3>
+
+<div>Path: <span id="debug-path"></span></div>
+
+<div>Query: <span id="debug-query"></span></div>
+
+</div>
+
+
+<div class="panel">
+
+<h2>Router Output</h2>
+
+<div id="app"></div>
+
+</div>
+
+</div>
+
+
+</div>
+
+<script>
+
+const pathEl = document.getElementById("current-path")
+
+function updateRouteInfo() {
+
+  const path = window.location.pathname
+  const query = window.location.search
+
+  pathEl.textContent = path + query
+
+}
+
+window.addEventListener("popstate", updateRouteInfo)
+
+/* patch pushState so it also triggers update */
+
+const originalPush = history.pushState
+history.pushState = function () {
+  originalPush.apply(this, arguments)
+  updateRouteInfo()
+}
+
+const originalReplace = history.replaceState
+history.replaceState = function () {
+  originalReplace.apply(this, arguments)
+  updateRouteInfo()
+}
+
+updateRouteInfo()
+
+
+function updateActiveLinks() {
+
+  const links = document.querySelectorAll("[router-link]")
+
+  links.forEach(link => {
+
+    const href = link.getAttribute("href")
+    if (!href) return
+
+    if (window.location.pathname.startsWith(href)) {
+      link.classList.add("active")
+    } else {
+      link.classList.remove("active")
+    }
+
+  })
+
+}
+
+window.addEventListener("popstate", updateActiveLinks)
+
+const originalPush2 = history.pushState
+history.pushState = function () {
+  originalPush2.apply(this, arguments)
+  updateActiveLinks()
+}
+
+updateActiveLinks()
+
+
+function updateDebug() {
+
+  document.getElementById("debug-path").textContent =
+    window.location.pathname
+
+  document.getElementById("debug-query").textContent =
+    window.location.search || "(none)"
+
+}
+
+window.addEventListener("popstate", updateDebug)
+
+const originalPush3 = history.pushState
+history.pushState = function () {
+  originalPush3.apply(this, arguments)
+  updateDebug()
+}
+
+updateDebug()
+
+</script>
 
 </body>
-
 </html>

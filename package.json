@@ -1,11 +1,25 @@
 {
   "name": "jong-router",
-  "version": "0.1.13",
-  "description": "A lightweight and simple-to-use web components router in Vanilla JavaScript with support for guards, nested routes, page not found, passing query parameters to components, passing route parameters to components, passing route data to components, and a router link for single-page application navigation without reloading the page.",
+  "version": "0.1.14",
+  "description": "JongRouter is a lightweight client-side router for Web Components, built with Vanilla JavaScript. It enables Single Page Application (SPA) navigation without page reloads while staying framework-agnostic.Designed for developers who want a simple router for Web Components without bringing in a heavy framework",
   "keywords": [
+    "redgin",
+    "ScalpelJS",
     "jong-router",
+    "web-components",
     "web components router",
-    "custom elements"
+    "custom elements",
+    "vanilla javascript",
+    "spa",
+    "single-page application",
+    "client-side router",
+    "frontend router",
+    "nested routes",
+    "route guards",
+    "query parameters",
+    "route parameters",
+    "javascript router",
+    "microfrontend"
   ],
   "main": "dist/jong-router.min.js",
   "types": "dist/jong-router.d.ts",

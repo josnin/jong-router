@@ -1,254 +1,209 @@
 // jong-router.ts
 
-interface IRoute {
 
-  // url path to match
-  pattern: string;
-
-  // use component based to defin the app content
-  component?: Promise<any>;
-
-  // use html element to define the app content
-  html?: string;
-
-  guards?: (() => boolean)[];
-
-  // mostly use for guard side effects
-  redirect?: string;
-
-  // additional data to pass to components
-  data?: any; 
+export interface GuardContext {
+  path?: string
+  params?: Record<string, string>
+  query?: URLSearchParams
+  data?: any
 }
 
+//export type Guard = (this: JongRouter, ctx?: GuardContext) => boolean
+
+
+
+
+export interface IRoute {
+  pattern: string
+  component?: Promise<any>
+  html?: string
+  children?: IRoute[]
+  guards?: ((ctx?: any) => boolean)[]
+  redirect?: string
+  data?: Record<string, any>
+}
 
 class JongRouter {
 
-  private routes: IRoute[];
-  private outlet: HTMLElement;
-  private shadowRoot1: ShadowRoot | undefined;
+  private routes: IRoute[]
+  private outlet: HTMLElement
+  private basePath: string
+  private isRoot: boolean
 
-
-
-  constructor(routes: IRoute[], outlet: HTMLElement, shadowRoot1?: ShadowRoot | undefined) {
-
-    this.routes = routes;
-    this.outlet = outlet;
-    this.shadowRoot1 = shadowRoot1;
-
+  constructor(
+    routes: IRoute[],
+    outlet: HTMLElement,
+    basePath: string = '',
+    isRoot: boolean = false
+  ) {
+    this.routes = routes
+    this.outlet = outlet
+    this.basePath = basePath
+    this.isRoot = isRoot
   }
-
-
 
   public init(): void {
 
-    this.setupNavigation();
+    if (this.isRoot) {
 
-    this.navigate();
+      window.addEventListener('popstate', () => this.navigate())
 
-  }
+      document.addEventListener('click', (event) => this.handleClick(event))
 
+    }
 
-
-  private setupNavigation(): void {
-
-    window.addEventListener('popstate', () => this.navigate());
-
-
-    document.addEventListener('click', (event) => this.handleClick(event));
+    this.navigate()
 
   }
 
+  private handleClick(event: Event): void {
+
+    const path = event.composedPath()
+
+    // Find the first element that is <a> or <button> with router-link
+    const link = path.find(node =>
+      ((node instanceof HTMLAnchorElement) || (node instanceof HTMLButtonElement)) &&
+      node.hasAttribute('router-link')
+    ) as (HTMLAnchorElement | HTMLButtonElement) | undefined
+
+    if (!link) return
+
+    const href = link.getAttribute('href')
+    if (!href || href.startsWith('http')) return
+
+    if (event instanceof MouseEvent) {
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+    }
+
+    event.preventDefault()
+
+    // Both <a> and <button> now navigate via router
+    this.navigateTo(href)
+  }
 
 
   private navigate(): void {
 
-    const path = window.location.pathname;
+    const path = window.location.pathname
 
-    const matchedRoute: IRoute | undefined  = this.routes.find(route => this.matchRoute(route.pattern, path));
+    const matched = this.routes.find(route =>
+      this.matchRoute(route.pattern, path)
+    )
 
+    if (!matched) return
 
-    if (matchedRoute) {
+    const params = this.extractRouteParams(matched.pattern, path)
 
-      if (matchedRoute.guards) {
-        const guardsRes = matchedRoute.guards.every(guard => {
-          const guardFn = guard.bind(this)();
-          if (!guardFn) {
-            if (matchedRoute.redirect) {
-              this.navigateTo(matchedRoute.redirect);
-            } else {
-              console.warn('Guard prevented navigation, and no redirect route specified!');
-            }
-          }
-          return guardFn === true;
-        });
+    this.renderRoute(matched, params)
 
-        // dont proceed if
-        // aggregate result is false
-        if (guardsRes === false) return;
+  }
 
+  private async renderRoute(
+    route: IRoute,
+    params: Record<string, string>
+  ) {
+
+    if (route.guards) {
+
+      const ctx = {
+        path: window.location.pathname,
+        params,
+        query: new URLSearchParams(window.location.search),
+        data: route.data
       }
 
-      if (matchedRoute.component) {
-        this.loadComponent(matchedRoute.component, this.extractRouteParams(matchedRoute.pattern, path), matchedRoute.data);
-      } else if (matchedRoute.html) {
-        this.loadContent(matchedRoute.html)
-      } else {
-        console.warn('no component or html route specified!')
-      }
+      const ok = route.guards.every(g => g(ctx))
 
-      return;
+      if (!ok) {
+        if (route.redirect) this.navigateTo(route.redirect)
+        return
+      }
 
     }
 
-    // to handle users navigating to a path not defined in the routes
-    // example page not found
-    const notMatchedRoute: IRoute | undefined = this.routes.find(route => route.pattern === '**');
-    if (notMatchedRoute) {
-      if (notMatchedRoute.component) {
-        this.loadComponent(notMatchedRoute.component, this.extractRouteParams(notMatchedRoute.pattern, path), notMatchedRoute.data);
-      } else if (notMatchedRoute.html) {
-        this.loadContent(notMatchedRoute.html)
+
+    if (route.component) {
+
+      const module = await route.component
+      const Component = module.default
+
+      const component = new Component()
+
+      component.setAttribute('route-params', JSON.stringify(params))
+      component.router = this
+
+      this.outlet.innerHTML = ''
+      this.outlet.appendChild(component)
+
+      if (route.children) {
+
+        const childOutlet =
+          component.shadowRoot?.querySelector('[router-outlet]') ||
+          component.querySelector('[router-outlet]')
+
+        if (childOutlet) {
+
+          const childRouter = new JongRouter(
+            route.children,
+            childOutlet as HTMLElement,
+            route.pattern
+          )
+
+          childRouter.navigate()
+
+        }
+
       }
+
     }
 
-  }
+    else if (route.html) {
 
-
-  private loadContent(html: string): void {
-    //const app = document.getElementById(this.app);
-    //if (app) app.innerHTML = html;
-    this.outlet.innerHTML = html;
-  }
-
-  private async loadComponent(componentImport: Promise<any>, params: { [key: string]: string }, data: { [key: string]: string }): Promise<void> {
-
-    componentImport
-
-      .then(module => {
-
-        const ComponentClass = module.default;
-
-        const component = new ComponentClass();
-        const queryParams = this.extractQueryParams()
-
-        if (params) component.setAttribute('route-params', JSON.stringify(params));
-        if (data) component.setAttribute('route-data', JSON.stringify(data));
-        if (queryParams) component.setAttribute('query-params', JSON.stringify(queryParams));
-
-        // pass all router functional to components
-        // to reuse functions inside components
-        component.router = this;
-
-        // clean
-        this.outlet.innerHTML = '';
-
-        // can only append 
-        this.outlet.appendChild(component);
-
-
-      })
-
-      .catch(error => { 
-        console.error(`Error loading component: ${error}`);
-        //document.getElementById(this.app)!.innerHTML = 'Component not found'
-        this.outlet.innerHTML = 'Component not found'
-
-      });
-
-  }
-
-
-
-  private handleClick(event: Event): void {
-
-    // @ts-ignore
-    const isInsideShadowDom = event.composedPath().includes(this.shadowRoot1)
-    const target = isInsideShadowDom ? event.composedPath()[0] : event.target;
-
-
-    if (
-
-      (target instanceof HTMLAnchorElement || target instanceof HTMLButtonElement) &&
-
-      target.hasAttribute('router-link')
-
-    ) {
-
-      event.preventDefault();
-
-      //const href = event.target.getAttribute('href');
-      const href = target.getAttribute('href');
-
-      window.history.pushState({}, '', href);
-
-      this.navigate();
+      this.outlet.innerHTML = route.html
 
     }
 
   }
-
 
   private matchRoute(pattern: string, path: string): boolean {
 
-    const patternSegments = pattern.split('/').filter(segment => segment !== '');
+    if (pattern === '**') return true
 
-    const pathSegments = path.split('/').filter(segment => segment !== '');
+    const p = pattern.split('/').filter(Boolean)
+    const s = path.split('/').filter(Boolean)
 
+    if (p.length > s.length) return false
 
-    return patternSegments.length === pathSegments.length &&
-
-      patternSegments.every((patternSegment, i) =>
-
-        patternSegment.startsWith(':') || patternSegment === pathSegments[i]
-
-      );
+    return p.every((seg, i) =>
+      seg.startsWith(':') || seg === s[i]
+    )
 
   }
 
-  private extractQueryParams():  { [key:string]: string } {
-    const queryString = window.location.search;
-    const params = new URLSearchParams(queryString);
-    const queryParams: { [key: string]: string } = {};
-    params.forEach( (value, key) => {
-      queryParams[key] = value;
-    })
-    return queryParams;
-  }
+  private extractRouteParams(pattern: string, path: string) {
 
+    const params: Record<string,string> = {}
 
+    const p = pattern.split('/').filter(Boolean)
+    const s = path.split('/').filter(Boolean)
 
-  private extractRouteParams(pattern: string, path: string): { [key: string]: string } {
-
-    return pattern.split('/').reduce((params, segment, i) => {
-
-      if (segment.startsWith(':')) {
-
-        // @ts-ignore
-        params[segment.slice(1)] = path.split('/')[i];
-
+    p.forEach((seg,i) => {
+      if (seg.startsWith(':')) {
+        params[seg.slice(1)] = s[i]
       }
+    })
 
-      return params;
-
-    }, {});
-
+    return params
   }
 
+  public navigateTo(route: string) {
 
+    window.history.pushState({}, '', route)
 
-  public navigateTo(route: string): void {
-
-    window.history.pushState({}, '', route);
-
-    this.navigate();
+    this.navigate()
 
   }
 
 }
-
-
-
-// Export the class for reuse
-export { IRoute }
 
 export default JongRouter;

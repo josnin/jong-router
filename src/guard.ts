@@ -1,25 +1,7 @@
+import { GuardContext } from './jong-router'
 
-function authencationGuard(this: any): boolean {
-  const isAuthenticated = true;
-
-  console.log(`call authenticationGuard ${isAuthenticated}`)
-
-  return isAuthenticated;
-
+export function authencationGuard(ctx?: GuardContext): boolean {
+  console.log('Guard check', ctx)
+  if (ctx?.params?.teamId === 'blocked') return false
+  return true
 }
-
-function sessionGuard(this: any): boolean {
-  const wSession = true;
-
-  console.log(`call sessionGuard ${wSession}`)
-
-  // not recommended to have a navigation inside this function?
-  // example > this.navigateTo('/about');
-  // it can lead to some complexity & negative effects
-  // do it in the routes.redirect
-
-  return wSession;
-
-}
-
-export { authencationGuard, sessionGuard }
