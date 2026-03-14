@@ -12,7 +12,7 @@ Designed for developers who want a simple router for Web Components without brin
 ## Features
 
 * SPA Navigation
-Navigate without reloading the page using the router-link attribute.
+Navigate without reloading the page using the `router-link` attribute.
 * Route Guards
 Protect routes with custom guard logic before navigation.
 * Nested Routing
@@ -275,6 +275,7 @@ const data = JSON.parse(
 8. **Nested Routes & Sub-Outlest**
 
 JongRouter supports hierarchical routing. This allows you to render a "Shell" or "Layout" component and then inject sub-pages into it dynamically.
+
 Step 1: Define Child Routes
 Create a separate file for your sub-navigation.
 
