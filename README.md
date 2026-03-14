@@ -154,6 +154,8 @@ Go to About
 4. Programmatic Navigation
 Components can navigate programmatically.
 
+Example outside component
+
 ```js
 import { router } from "../router-instance"
 
@@ -166,7 +168,7 @@ this.shadowRoot
   .getElementById("btn")
   .addEventListener("click", () => {
 
-    router.navigateTo("/profile/admin")
+    this.navigateTo("/profile/admin")
 
   })
 ```
@@ -180,7 +182,7 @@ Implement guards for route conditions
 
 
 
-```javascript
+```js
 
 const router = new JongRouter([
 
@@ -270,28 +272,64 @@ const data = JSON.parse(
 ```
 
 
-8. **Nested Routes**
-JongRouter supports child routers inside components.
+8. **Nested Routes & Sub-Outlest**
+
+JongRouter supports hierarchical routing. This allows you to render a "Shell" or "Layout" component and then inject sub-pages into it dynamically.
+Step 1: Define Child Routes
+Create a separate file for your sub-navigation.
 
 Example
-```bash
-/nested
-   ├─ /nested/c1
-   ├─ /nested/c2
-   └─ /nested/c3
+```ts
+// samples/nested/nested-routes.ts
+import { IRoute } from "../../src/jong-router"
+
+const routes: IRoute[] = [
+  { pattern: "/nested/c1", html: "<p>Child Page 1</p>" },
+  { pattern: "/nested/c2", html: "<p>Child Page 2</p>" },
+  { pattern: "/nested/c3", html: "<p>Child Page 3</p>" }
+]
+
+export default routes
+
 ```
 
-A parent component can create its own router instance
-```js
-const childRouter = new JongRouter(
-  childRoutes,
-  this.shadowRoot.getElementById("outlet"),
-  "/nested",
-  true
-)
+Step 2: Prepare the Parent Component
+Your parent component must contain an element with the router-outlet attribute. This is where the child routes will be rendered.
 
-childRouter.init()
+A parent component can create its own router instance w children routes
+```ts
+// samples/nested/sample-nested.ts
+export default class SampleNested extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = `
+      <div class="layout">
+        <nav>
+          <a href="/nested/c1" router-link>Go to C1</a>
+          <a href="/nested/c2" router-link>Go to C2</a>
+        </nav>
+        <!-- Child routes will appear here -->
+        <div router-outlet></div> 
+      </div>
+    `;
+  }
+}
+
 ```
+
+Step 3: Register Nested Routes
+Pass the children to the parent route. You can use a static array or a function for Lazy Loading.
+```ts
+const routes: IRoute[] = [
+  {
+    pattern: '/nested',
+    component: import('./samples/nested/sample-nested'),
+    // Lazy-load the child route definitions
+    children: () => import("./samples/nested/nested-routes") 
+  }
+]
+
+```
+
 
 ## Playground & Examples
 Playground & Examples

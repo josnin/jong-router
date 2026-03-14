@@ -1,5 +1,3 @@
-// samples/sample-nested.ts
-  import JongRouter, { IRoute } from '../../src/jong-router'
 
   export default class SampleNested extends HTMLElement {
     constructor() {
@@ -16,18 +14,6 @@
       `
     }
 
-    connectedCallback() {
-      const childRoutes: IRoute[] = [
-        { pattern: '/nested/c1', html: '<p>Welcome to Nested C1</p>' },
-        { pattern: '/nested/c2', html: '<p>Welcome to Nested C2</p>' },
-        { pattern: '/nested/c3', html: '<p>Welcome to Nested C3</p>' },
-      { pattern: '**', html: '<p>Nested Page Not Found</p>' }
-    ]
-
-    const outlet = this.shadowRoot!.querySelector<HTMLElement>('[router-outlet]')!
-    const childRouter = new JongRouter(childRoutes, outlet, '/nested', false)
-    childRouter.init()
-  }
 }
 
 customElements.define('sample-nested', SampleNested)

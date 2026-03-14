@@ -1,4 +1,4 @@
-import { GuardContext } from './jong-router'
+import { GuardContext } from '../../src/jong-router'
 
 export function authencationGuard(ctx?: GuardContext): boolean {
   console.log('Guard check', ctx)

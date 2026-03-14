@@ -1,6 +1,6 @@
 // index.ts
 import JongRouter, { IRoute } from './src/jong-router'
-import { authencationGuard } from './src/guard'
+import { authencationGuard } from './samples/guards/guard'
 
 const routes: IRoute[] = [
   { pattern: '/about', html: `<h2>About Page</h2>` },
@@ -15,16 +15,13 @@ const routes: IRoute[] = [
   {
   pattern: '/nested',
   component: import('./samples/nested/sample-nested'),
-  children: [
-    { pattern: '/nested/c1', html: '<p>Nested C1 Page</p>' },
-    { pattern: '/nested/c2', html: '<p>Nested C2 Page</p>' },
-    { pattern: '/nested/c3', html: '<p>Nested C3 Page</p>' },
-    { pattern: '**', html: '<p>Nested 404</p>' }
-  ]
-},
+  children: () => import("./samples/nested/nested-routes")
+  },
   { pattern: '**', html: `<h2>404 Page</h2>` }
 ]
 
-export const router = new JongRouter(routes, document.getElementById('app')!, '', true)
+export const router = new JongRouter(routes, document.getElementById('app')!)
 router.init()
+
+
 

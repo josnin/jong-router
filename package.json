@@ -1,6 +1,6 @@
 {
   "name": "jong-router",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "description": "JongRouter is a lightweight client-side router for Web Components, built with Vanilla JavaScript. It enables Single Page Application (SPA) navigation without page reloads while staying framework-agnostic.Designed for developers who want a simple router for Web Components without bringing in a heavy framework",
   "keywords": [
     "redgin",
